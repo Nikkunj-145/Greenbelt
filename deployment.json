@@ -1,0 +1,13 @@
+{
+  "network": "testnet",
+  "token": {
+    "contractId": "CBKQT6J6SFPSNJSK62U4OVVRT3U2UTKVHAKSBGH6SEA4SVV2A67RKQKR",
+    "wasmHash": "9988ec1c12de6846541f30a7a104c49937deb248b413b66d1e53e0dc00b29693",
+    "decimals": 7,
+    "symbol": "STK"
+  },
+  "staking": {
+    "contractId": "CAZIVT4MISKI5FNDGGJ6PO24DM73UTUQ6HTVWUPCG3QSTQ4ZBQGY3ONO",
+    "wasmHash": "79017ffb9bb258cf51001bebd06605784778ac9a9f78179b8d3c80519c031864"
+  }
+}
