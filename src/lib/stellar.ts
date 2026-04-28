@@ -5,6 +5,7 @@ import {
   BASE_FEE,
   Address,
   Account,
+  Keypair,
   nativeToScVal,
   scValToNative,
   xdr,
@@ -14,7 +15,9 @@ import { signXdr } from './wallet';
 
 export const server = new rpc.Server(RPC_URL, { allowHttp: RPC_URL.startsWith('http://') });
 
-const DUMMY = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOOO';
+// Read-only simulations don't need a real funded account, but the SDK
+// validates the format. Generate a fresh valid keypair at module load.
+const DUMMY = Keypair.random().publicKey();
 
 async function simulate(contractId: string, method: string, args: xdr.ScVal[] = []) {
   const tx = new TransactionBuilder(new Account(DUMMY, '0'), {
@@ -112,4 +115,15 @@ export async function unstake(user: string, amount: bigint) {
 }
 export async function claim(user: string) {
   return sendTx(user, STAKING_ID!, 'claim', [new Address(user).toScVal()]);
+}
+
+// ─── Faucet ───
+export async function faucetClaimed(addr: string): Promise<boolean> {
+  if (!TOKEN_ID) return false;
+  return Boolean(await simulate(TOKEN_ID, 'faucet_claimed', [new Address(addr).toScVal()]));
+}
+
+export async function faucetMint(user: string) {
+  if (!TOKEN_ID) throw new Error('VITE_TOKEN_ID not set');
+  return sendTx(user, TOKEN_ID, 'faucet', [new Address(user).toScVal()]);
 }
