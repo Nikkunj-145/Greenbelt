@@ -9,7 +9,7 @@ A two-contract DeFi mini-dApp on Stellar Soroban demonstrating **inter-contract 
 
 > **Stellar Frontend Challenge — Level 4 (Green Belt) submission.**
 
-**🌐 Live demo:** _Deploying to Render — URL will be added here once live._
+**🌐 Live demo:** **https://stk-staking.onrender.com**
 
 ---
 
@@ -207,7 +207,9 @@ The CI badge above is live — it goes green when both jobs (`Build + Test contr
 
 ### Mobile responsive
 
-_Screenshot to be added: open the live demo on a phone (or DevTools → mobile mode 375 × 667) and capture the staking page._
+Open **https://stk-staking.onrender.com** on a phone (or Chrome DevTools → mobile mode 375 × 667). The layout collapses to a single column, buttons are full-width and tap-friendly, and the wallet bar wraps cleanly.
+
+![Mobile view](docs/mobile.png)
 
 ---
 
@@ -224,7 +226,7 @@ _Screenshot to be added: open the live demo on a phone (or DevTools → mobile m
 - [x] **GitHub Actions CI** (cargo test + frontend build + dist artifact)
 - [x] **15+ meaningful commits** in repo history
 - [x] **Render Blueprint** (`render.yaml`) for one-click deploy
-- [ ] Live deploy URL (paste here once Render finishes build)
+- [x] Live deploy URL: **https://stk-staking.onrender.com**
 
 ---
 
