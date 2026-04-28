@@ -45,7 +45,10 @@ jobs:
           cache: npm
 
       - name: Install deps
-        run: npm ci --no-audit --no-fund
+        # Using `npm install` (not `npm ci`) so the lockfile can reconcile
+        # optional native deps that differ between Windows-generated and
+        # Linux-runner environments (e.g. utf-8-validate, node-fetch).
+        run: npm install --no-audit --no-fund
 
       - name: Type-check + build
         env:
