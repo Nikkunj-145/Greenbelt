@@ -1,8 +1,15 @@
 # 🟢 STK Staking — Green Belt
 
-A two-contract DeFi mini-dApp on Stellar Soroban demonstrating **inter-contract calls**, real-time on-chain data, mobile-responsive UI, and a CI/CD pipeline.
+[![CI](https://github.com/Nikkunj-145/Greenbelt/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikkunj-145/Greenbelt/actions/workflows/ci.yml)
+[![Network](https://img.shields.io/badge/network-Stellar%20Testnet-14b8a6)](https://stellar.expert/explorer/testnet)
+[![Tests](https://img.shields.io/badge/tests-15%20passing-22c55e)](#-tests)
+[![License](https://img.shields.io/badge/license-MIT-blue)](#-license)
+
+A two-contract DeFi mini-dApp on Stellar Soroban demonstrating **inter-contract calls**, an open token **faucet**, real-time on-chain data, mobile-responsive UI, and a CI/CD pipeline.
 
 > **Stellar Frontend Challenge — Level 4 (Green Belt) submission.**
+
+**🌐 Live demo:** _Deploying to Render — URL will be added here once live._
 
 ---
 
@@ -14,10 +21,18 @@ Users connect a wallet, **stake** an SEP-41-style fungible token (`STK`) into a 
 
 ## 🚀 Live deployment (testnet)
 
-| Contract        | Address |
-| --------------- | ------- |
-| **Token (STK)** | [`CBKQT6J6SFPSNJSK62U4OVVRT3U2UTKVHAKSBGH6SEA4SVV2A67RKQKR`](https://stellar.expert/explorer/testnet/contract/CBKQT6J6SFPSNJSK62U4OVVRT3U2UTKVHAKSBGH6SEA4SVV2A67RKQKR) |
-| **Staking pool**| [`CAZIVT4MISKI5FNDGGJ6PO24DM73UTUQ6HTVWUPCG3QSTQ4ZBQGY3ONO`](https://stellar.expert/explorer/testnet/contract/CAZIVT4MISKI5FNDGGJ6PO24DM73UTUQ6HTVWUPCG3QSTQ4ZBQGY3ONO) |
+| Contract        | Address | Explorer |
+| --------------- | ------- | -------- |
+| **Token (STK)** | `CDUECTBOEY4HIGBKXNRW25LB4SYVI4UAUDME2LYAE6T6K5RRFTWCIEDY` | [view](https://stellar.expert/explorer/testnet/contract/CDUECTBOEY4HIGBKXNRW25LB4SYVI4UAUDME2LYAE6T6K5RRFTWCIEDY) |
+| **Staking pool**| `CBT4AXYW2RL6QG2QA2C7P4UOBEZRVJLGQW6764NTB6WZBFJNM2SWXD2R` | [view](https://stellar.expert/explorer/testnet/contract/CBT4AXYW2RL6QG2QA2C7P4UOBEZRVJLGQW6764NTB6WZBFJNM2SWXD2R) |
+
+### Sample on-chain transactions
+
+| Action | Tx hash |
+| ------ | ------- |
+| Token deploy | [`f19af11e60433a162f4f93cf7263ee98048e2dce9e28276c1bb4281a7afe1cbd`](https://stellar.expert/explorer/testnet/tx/f19af11e60433a162f4f93cf7263ee98048e2dce9e28276c1bb4281a7afe1cbd) |
+| Staking deploy | [`ce158073be95dd35f78c0ae0ad4bdb85bdda7e7df7332a1643682a4bff8f1df8`](https://stellar.expert/explorer/testnet/tx/ce158073be95dd35f78c0ae0ad4bdb85bdda7e7df7332a1643682a4bff8f1df8) |
+| Faucet claim | [`ccb5d7c0add2d17cf32063e37200a3c20e24ed93ecc771b031cd5139abe9b4cf`](https://stellar.expert/explorer/testnet/tx/ccb5d7c0add2d17cf32063e37200a3c20e24ed93ecc771b031cd5139abe9b4cf) |
 
 Reward formula: `points = staked_amount × seconds_elapsed × 100 / 1e9`
 
@@ -26,16 +41,19 @@ Reward formula: `points = staked_amount × seconds_elapsed × 100 / 1e9`
 ## ✨ Features
 
 - 🔗 **Inter-contract calls** — staking pool invokes token's `transfer` & `balance`
+- 💧 **Open faucet** — any user can claim 1,000 STK once to try the dApp (no admin needed)
 - 🪪 **Multi-wallet** via StellarWalletsKit (Freighter, xBull, Albedo, Lobstr, Hana)
+- 🔄 **Switch-account button** — fresh wallet picker on every connect
 - 📱 **Mobile responsive** — works edge-to-edge on phones
 - ⏱️ **Live points ticker** — auto-refresh every 4 s while connected
 - 🎚️ Stake / Unstake / Claim with **Max** quick-fill
 - 🧮 Bigint-safe amount math (7-decimal token)
 - 📊 4 live stats: wallet · staked · pending points · pool TVL
-- 🛡️ **5 contract error variants** mapped to friendly UI:
-  - `NotInitialized`, `AlreadyInitialized`, `NothingStaked`, `InsufficientStake`, `NegativeAmount`
-- ✅ **13 unit tests** (5 token + 8 staking) all passing
+- 🛡️ **6 contract error variants** mapped to friendly UI:
+  - `NotInitialized`, `AlreadyInitialized`, `InsufficientBalance`, `NegativeAmount`, `AlreadyClaimed`, `NothingStaked`
+- ✅ **15 unit tests** (7 token + 8 staking) all passing
 - 🤖 **GitHub Actions CI** — runs `cargo test --workspace` + `npm run build` on every push
+- 🛟 **ErrorBoundary** — catches render-time crashes and displays a graceful fallback
 
 ---
 
@@ -46,13 +64,15 @@ cargo test --workspace
 ```
 
 ```
-running 5 tests (token)
-test test::init_sets_metadata      ok
-test test::mint_and_balance        ok
-test test::transfer_moves_balance  ok
+running 7 tests (token)
+test test::init_sets_metadata           ok
+test test::mint_and_balance             ok
+test test::transfer_moves_balance       ok
 test test::transfer_insufficient_fails  ok
-test test::negative_amount_rejected  ok
-test result: ok. 5 passed
+test test::negative_amount_rejected     ok
+test test::faucet_grants_tokens_once    ok
+test test::faucet_double_claim_rejected ok
+test result: ok. 7 passed
 
 running 8 tests (staking)
 test test::stake_locks_tokens_into_pool      ok
@@ -76,7 +96,7 @@ test result: ok. 8 passed
 | Frontend    | React 18 + Vite + TypeScript |
 | Styling     | TailwindCSS (mobile-first) + Lucide |
 | Wallets     | StellarWalletsKit |
-| Stellar SDK | `@stellar/stellar-sdk` 13 |
+| Stellar SDK | `@stellar/stellar-sdk` 14 (Protocol 23) |
 | CI          | GitHub Actions (Rust + Node matrix) |
 
 ---
@@ -94,7 +114,9 @@ green-belt/
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── index.css
-├── .github/workflows/ci.yml
+├── .github/workflows/ci.yml   # CI: cargo test + frontend build
+├── render.yaml                 # Render Blueprint (one-click deploy)
+├── netlify.toml                # Netlify build config (alt deploy)
 ├── deployment.json
 ├── .env.example
 └── README.md
@@ -136,7 +158,18 @@ stellar contract invoke --id <TOKEN_ID> --source <id> --network testnet -- mint 
   --to <USER_ADDR> --amount 10000000
 ```
 
-> **Tip**: To grant test tokens to your demo wallet, the token admin (deployer key) must call `mint`. The frontend keeps minting admin-only for security; an open faucet would defeat the access-control demo.
+> **Tip**: New users can claim **1,000 STK from the in-app faucet** (one-time per wallet). Admin `mint` is also available via CLI for arbitrary amounts.
+
+---
+
+## 🚀 Deploy your own (Render)
+
+The repo ships a `render.yaml` Blueprint, so you can deploy a copy in two clicks:
+
+1. Fork this repo on GitHub.
+2. Open https://dashboard.render.com → **New +** → **Blueprint** → connect your fork.
+3. Render reads `render.yaml`, runs `npm ci && npm run build`, and serves `dist/` as a static site with all `VITE_*` env vars pre-filled.
+4. SPA fallback (`/* → /index.html`) and asset caching headers are configured automatically.
 
 ---
 
@@ -164,19 +197,34 @@ Soroban's auth framework propagates the `require_auth()` automatically through t
 
 ---
 
+## 📸 Screenshots
+
+### CI/CD pipeline
+
+![CI status](https://github.com/Nikkunj-145/Greenbelt/actions/workflows/ci.yml/badge.svg)
+
+The CI badge above is live — it goes green when both jobs (`Build + Test contracts` and `Build frontend`) succeed on `main`.
+
+### Mobile responsive
+
+_Screenshot to be added: open the live demo on a phone (or DevTools → mobile mode 375 × 667) and capture the staking page._
+
+---
+
 ## ✅ Submission checklist (Green Belt)
 
 - [x] **2 deployed contracts** demonstrating inter-contract calls
-- [x] **13 unit tests passing** (≥ required)
-- [x] **5 contract error variants** mapped to UI
-- [x] Multi-wallet support
-- [x] **Mobile-responsive UI** (Tailwind, edge-to-edge on small screens)
+- [x] **15 unit tests passing**
+- [x] **6 contract error variants** mapped to UI
+- [x] Multi-wallet support + switch-account button
+- [x] **Open faucet** (custom token mechanic)
+- [x] **Mobile-responsive UI** (Tailwind mobile-first, edge-to-edge)
 - [x] **Live data ticker** (4 s polling)
-- [x] Comprehensive README
-- [x] **GitHub Actions CI** (cargo test + frontend build)
-- [x] **8+ commits** in repo history
-- [ ] Demo video URL (record + add link)
-- [ ] Live deploy URL (Vercel/Netlify)
+- [x] Comprehensive README with badges, contract addresses, and tx hashes
+- [x] **GitHub Actions CI** (cargo test + frontend build + dist artifact)
+- [x] **15+ meaningful commits** in repo history
+- [x] **Render Blueprint** (`render.yaml`) for one-click deploy
+- [ ] Live deploy URL (paste here once Render finishes build)
 
 ---
 
