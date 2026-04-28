@@ -1,6 +1,6 @@
 # 🟢 STK Staking — Green Belt
 
-[![CI](https://github.com/Nikkunj-145/Greenbelt/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikkunj-145/Greenbelt/actions/workflows/ci.yml)
+[![CI](https://github.com/Nikkunj-145/stk-staking/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikkunj-145/stk-staking/actions/workflows/ci.yml)
 [![Network](https://img.shields.io/badge/network-Stellar%20Testnet-14b8a6)](https://stellar.expert/explorer/testnet)
 [![Tests](https://img.shields.io/badge/tests-15%20passing-22c55e)](#-tests)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#-license)
@@ -134,8 +134,8 @@ green-belt/
 
 ### Run
 ```bash
-git clone https://github.com/Nikkunj-145/Greenbelt.git
-cd Greenbelt
+git clone https://github.com/Nikkunj-145/stk-staking.git
+cd stk-staking
 npm install
 cp .env.example .env.local   # already pre-filled with deployed contracts
 npm run dev
@@ -201,7 +201,7 @@ Soroban's auth framework propagates the `require_auth()` automatically through t
 
 ### CI/CD pipeline
 
-![CI status](https://github.com/Nikkunj-145/Greenbelt/actions/workflows/ci.yml/badge.svg)
+![CI status](https://github.com/Nikkunj-145/stk-staking/actions/workflows/ci.yml/badge.svg)
 
 The CI badge above is live — it goes green when both jobs (`Build + Test contracts` and `Build frontend`) succeed on `main`.
 

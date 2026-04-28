@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: stk-staking-greenbelt
+    name: stk-staking
     runtime: static
     plan: free
-    buildCommand: npm ci && npm run build
+    buildCommand: npm install --no-audit --no-fund && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: true
     envVars:
