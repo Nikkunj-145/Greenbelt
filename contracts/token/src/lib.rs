@@ -15,6 +15,7 @@ pub enum Error {
     NotAdmin = 3,
     InsufficientBalance = 4,
     NegativeAmount = 5,
+    AlreadyClaimed = 6,
 }
 
 #[contracttype]
@@ -25,10 +26,13 @@ pub enum DataKey {
     Name,
     Symbol,
     Balance(Address),
+    Faucet(Address),
 }
 
 const TRANSFER: Symbol = symbol_short!("transfer");
 const MINT: Symbol = symbol_short!("mint");
+const FAUCET: Symbol = symbol_short!("faucet");
+const FAUCET_AMOUNT: i128 = 10_000_000_000; // 1,000 STK (with 7 decimals)
 
 #[contract]
 pub struct TokenContract;
@@ -93,6 +97,27 @@ impl TokenContract {
             .persistent()
             .get(&DataKey::Balance(id))
             .unwrap_or(0)
+    }
+
+    /// Open faucet: anyone can claim FAUCET_AMOUNT once per address.
+    pub fn faucet(env: Env, to: Address) -> Result<i128, Error> {
+        to.require_auth();
+        let claim_key = DataKey::Faucet(to.clone());
+        if env.storage().persistent().has(&claim_key) {
+            return Err(Error::AlreadyClaimed);
+        }
+        env.storage().persistent().set(&claim_key, &true);
+        let bal_key = DataKey::Balance(to.clone());
+        let cur: i128 = env.storage().persistent().get(&bal_key).unwrap_or(0);
+        let new_bal = cur + FAUCET_AMOUNT;
+        env.storage().persistent().set(&bal_key, &new_bal);
+        env.events().publish((FAUCET, to), FAUCET_AMOUNT);
+        Ok(FAUCET_AMOUNT)
+    }
+
+    /// Returns true if `addr` has already claimed from the faucet.
+    pub fn faucet_claimed(env: Env, addr: Address) -> bool {
+        env.storage().persistent().has(&DataKey::Faucet(addr))
     }
 
     pub fn decimals(env: Env) -> u32 {

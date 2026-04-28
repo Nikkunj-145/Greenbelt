@@ -59,3 +59,23 @@ fn negative_amount_rejected() {
     let res = client.try_mint(&alice, &-100);
     assert!(res.is_err());
 }
+
+#[test]
+fn faucet_grants_tokens_once() {
+    let (env, _, client) = setup();
+    let alice = Address::generate(&env);
+    assert_eq!(client.faucet_claimed(&alice), false);
+    let granted = client.faucet(&alice);
+    assert_eq!(granted, 10_000_000_000);
+    assert_eq!(client.balance(&alice), 10_000_000_000);
+    assert_eq!(client.faucet_claimed(&alice), true);
+}
+
+#[test]
+fn faucet_double_claim_rejected() {
+    let (env, _, client) = setup();
+    let alice = Address::generate(&env);
+    client.faucet(&alice);
+    let res = client.try_faucet(&alice);
+    assert!(res.is_err());
+}
