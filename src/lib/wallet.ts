@@ -16,6 +16,12 @@ export const kit = new StellarWalletsKit({
 const STORAGE_KEY = 'greenbelt:walletId';
 
 export async function openWalletPicker(): Promise<string> {
+  // Always clear prior selection so the modal shows fresh & Freighter
+  // re-prompts which account to use on connect.
+  localStorage.removeItem(STORAGE_KEY);
+  try {
+    await kit.disconnect();
+  } catch {}
   return new Promise((resolve, reject) => {
     kit
       .openModal({
@@ -45,8 +51,11 @@ export async function restoreWallet(): Promise<string | null> {
     return null;
   }
 }
-export function disconnect() {
+export async function disconnect() {
   localStorage.removeItem(STORAGE_KEY);
+  try {
+    await kit.disconnect();
+  } catch {}
 }
 export async function signXdr(xdr: string, address: string): Promise<string> {
   const { signedTxXdr } = await kit.signTransaction(xdr, {

@@ -1,14 +1,15 @@
-import { Wallet, LogOut, Copy } from 'lucide-react';
+import { Wallet, LogOut, Copy, RefreshCw } from 'lucide-react';
 import { shortAddr } from '../lib/format';
 
 interface Props {
   address: string | null;
   onConnect: () => void;
   onDisconnect: () => void;
+  onSwitch: () => void;
   loading: boolean;
 }
 
-export function WalletBar({ address, onConnect, onDisconnect, loading }: Props) {
+export function WalletBar({ address, onConnect, onDisconnect, onSwitch, loading }: Props) {
   if (!address) {
     return (
       <button onClick={onConnect} disabled={loading} className="btn btn-primary">
@@ -30,6 +31,14 @@ export function WalletBar({ address, onConnect, onDisconnect, loading }: Props) 
           <Copy className="w-3.5 h-3.5 text-white/60" />
         </button>
       </div>
+      <button
+        onClick={onSwitch}
+        disabled={loading}
+        className="btn btn-ghost text-sm"
+        title="Switch account"
+      >
+        <RefreshCw className="w-4 h-4" />
+      </button>
       <button onClick={onDisconnect} className="btn btn-ghost text-sm" title="Disconnect">
         <LogOut className="w-4 h-4" />
       </button>
